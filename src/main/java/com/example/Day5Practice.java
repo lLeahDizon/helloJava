@@ -11,10 +11,12 @@ public class Day5Practice {
         copyTextFile(sourcePath, targetPath);
         int charCount = countCharacters(targetPath);
         int lineCount = countLines(targetPath);
+        copyBinaryFile(sourcePath, "day5-copy-bytes.txt");
 
         System.out.println("复制完成: " + sourcePath + " -> " + targetPath);
         System.out.println("字符总数: " + charCount);
         System.out.println("行数: " + lineCount);
+        System.out.println("单词数: " + countWords(targetPath));
     }
 
     public static void createSourceFileIfNotExists(String path) {
@@ -74,5 +76,38 @@ public class Day5Practice {
             throw new RuntimeException("统计行数失败: " + path, e);
         }
         return lines;
+    }
+
+    public static void copyBinaryFile(String sourcePath, String targetPath) {
+        try (
+                BufferedInputStream in = new BufferedInputStream(new FileInputStream(sourcePath));
+                BufferedOutputStream out = new BufferedOutputStream(new FileOutputStream(targetPath));
+        ) {
+            byte[] buffer = new byte[8192];
+            int len;
+            while ((len = in.read(buffer)) != -1) {
+                out.write(buffer, 0, len);
+            }
+        } catch (IOException e) {
+            throw new RuntimeException("复制二进制文件失败: " + sourcePath + " -> " + targetPath, e);
+        }
+    }
+
+    public static int countWords(String path) {
+        int words = 0;
+        try (BufferedReader reader = new BufferedReader(new FileReader(path))) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                String trimmed = line.trim();
+                if (trimmed.isEmpty()) {
+                    continue;
+                }
+                String[] parts = trimmed.split("\\s+");
+                words += parts.length;
+            }
+        } catch (IOException e) {
+            throw new RuntimeException("统计单词失败: " + path, e);
+        }
+        return words;
     }
 }
