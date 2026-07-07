@@ -17,6 +17,18 @@ public class Day5Practice {
         System.out.println("字符总数: " + charCount);
         System.out.println("行数: " + lineCount);
         System.out.println("单词数: " + countWords(targetPath));
+
+        try {
+            countCharacters("not-exists.txt");
+        } catch (RuntimeException e) {
+            System.out.println("异常演练1: " + e.getMessage());
+        }
+
+        try {
+            copyTextFile("day5-source.txt", "/invalid/path/day5-copy.txt");
+        } catch (RuntimeException e) {
+            System.out.println("异常演练2: " + e.getMessage());
+        }
     }
 
     public static void createSourceFileIfNotExists(String path) {
@@ -39,8 +51,7 @@ public class Day5Practice {
     public static void copyTextFile(String sourcePath, String targetPath) {
         try (
                 BufferedReader reader = new BufferedReader(new FileReader(sourcePath));
-                BufferedWriter writer = new BufferedWriter(new FileWriter(targetPath))
-        ) {
+                BufferedWriter writer = new BufferedWriter(new FileWriter(targetPath))) {
             String line;
             while ((line = reader.readLine()) != null) {
                 writer.write(line);
@@ -81,8 +92,7 @@ public class Day5Practice {
     public static void copyBinaryFile(String sourcePath, String targetPath) {
         try (
                 BufferedInputStream in = new BufferedInputStream(new FileInputStream(sourcePath));
-                BufferedOutputStream out = new BufferedOutputStream(new FileOutputStream(targetPath));
-        ) {
+                BufferedOutputStream out = new BufferedOutputStream(new FileOutputStream(targetPath));) {
             byte[] buffer = new byte[8192];
             int len;
             while ((len = in.read(buffer)) != -1) {
