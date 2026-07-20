@@ -9,14 +9,7 @@ public class Day5Practice {
 
         createSourceFileIfNotExists(sourcePath);
         copyTextFile(sourcePath, targetPath);
-        int charCount = countCharacters(targetPath);
-        int lineCount = countLines(targetPath);
-        copyBinaryFile(sourcePath, "day5-copy-bytes.txt");
-
-        System.out.println("复制完成: " + sourcePath + " -> " + targetPath);
-        System.out.println("字符总数: " + charCount);
-        System.out.println("行数: " + lineCount);
-        System.out.println("单词数: " + countWords(targetPath));
+        printFileStatistics(targetPath);
 
         try {
             countCharacters("not-exists.txt");
@@ -29,6 +22,16 @@ public class Day5Practice {
         } catch (RuntimeException e) {
             System.out.println("异常演练2: " + e.getMessage());
         }
+    }
+
+    public static void printFileStatistics(String path) {
+        int charCount = countCharacters(path);
+        int lineCount = countLines(path);
+        int wordCount = countWords(path);
+        System.out.println("文件统计: " + path);
+        System.out.println("字符总数: " + charCount);
+        System.out.println("行数: " + lineCount);
+        System.out.println("单词数: " + wordCount);
     }
 
     public static void createSourceFileIfNotExists(String path) {
@@ -44,7 +47,7 @@ public class Day5Practice {
             writer.newLine();
             writer.write("Count chars and lines");
         } catch (IOException e) {
-            throw new RuntimeException("创源文件失败: " + path, e);
+            throw new RuntimeException("创建源文件失败: " + path, e);
         }
     }
 
